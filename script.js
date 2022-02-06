@@ -1,3 +1,5 @@
+let calcInputs = "";
+
 function add(...inputs)
 {
     return inputs.reduce((total, element) => total + +element, 0);
@@ -43,18 +45,20 @@ function operate(...inputs)
 
 const outputText = document.getElementById('output-text');
 
-function input(e)
+function input(e, input)
 {
     if(e.srcElement.id == 'clear')
     {
-        outputText.textContent = "";
+        calcInputs = "";
     }
     else
     {
-        outputText.textContent += e.srcElement.textContent;
+        calcInputs += input;
     }
+    
+    outputText.textContent = calcInputs;
 }
 
 const buttons = document.querySelectorAll('button');
 
-buttons.forEach(button => button.addEventListener('click', input));
+buttons.forEach(button => {button["data-input"] = button.textContent; button.addEventListener('click', (e) => input(e, button["data-input"]));});
