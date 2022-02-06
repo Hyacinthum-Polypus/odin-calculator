@@ -53,8 +53,3 @@ header {
     border: 1px solid black;
     background-color: white;
 }
-
-
-.align-right {
-    justify-content: flex-end;
-}
