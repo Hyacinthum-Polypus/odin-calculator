@@ -40,3 +40,21 @@ function operate(...inputs)
             return divide(inputs[0], inputs[1]);
     }
 }
+
+const outputText = document.getElementById('output-text');
+
+function input(e)
+{
+    if(e.srcElement.id == 'clear')
+    {
+        outputText.textContent = "";
+    }
+    else
+    {
+        outputText.textContent += e.srcElement.textContent;
+    }
+}
+
+const buttons = document.querySelectorAll('button');
+
+buttons.forEach(button => button.addEventListener('click', input));
