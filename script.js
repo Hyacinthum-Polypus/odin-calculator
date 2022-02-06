@@ -43,19 +43,28 @@ function operate(...inputs)
     }
 }
 
+function solveProblem(problem)
+{
+    console.log(problem);
+}
+
 const outputText = document.getElementById('output-text');
 
 function input(e, input)
 {
-    if(e.srcElement.id == 'clear')
+    switch(input)
     {
-        calcInputs = "";
+        case 'C':
+            calcInput = "";
+        break;
+        case '=':
+            let problem = calcInputs.lastIndexOf('=') == -1 ? calcInputs : calcInputs.slice(calcInputs.lastIndexOf('=')+1, calcInputs.length);
+            solveProblem(problem);
+        default:
+            calcInputs += input;
+        break;
     }
-    else
-    {
-        calcInputs += input;
-    }
-    
+
     outputText.textContent = calcInputs;
 }
 
