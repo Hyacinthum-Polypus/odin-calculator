@@ -108,6 +108,9 @@ function input(e, input)
         case '•':
             calcInputs += '.';
         break;
+        case '⇐':
+            calcInputs = calcInputs.slice(0, -1);
+        break;
         default:
             calcInputs += input;
         break;
