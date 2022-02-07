@@ -48,21 +48,44 @@ function printResult(result)
     calcInputs += '=' + result;
 }
 
+function removeExtraDecimalPoints(number)
+{
+    return number.split('.').reduce((newString, currentString, currentIndex) => {return currentIndex == 0 ? newString + currentString + '.' : newString + currentString}, '')
+}
+
+function separateFirstHalfOfOperation(problem)
+{
+    return [problem.slice(0, problem.search(/[+\-x\/]/)), problem.slice(problem.search(/[+\-x\/]/)+1, problem.length)];
+}
+
+function separateSecondHalfOfOperation(problem)
+{
+    problem[2] = problem[1].slice(secondOperator, problem[1].length);
+    problem[1] = problem[1].slice(0, secondOperator);
+    return problem;
+}
+
 function solveProblem(problem)
 {
     operator = problem.toString().match(/[+\-x\/]/);
     if(operator == 'x') operator = '*';
     if(operator == null) return printResult(problem);
-    problem = [problem.slice(0, problem.search(/[+\-x\/]/)), problem.slice(problem.search(/[+\-x\/]/)+1, problem.length)];
+
+    problem = separateFirstHalfOfOperation(problem);
+    problem[0] = removeExtraDecimalPoints(problem[0]);
+    console.log(problem[0]);
+    
     const secondOperator = problem[1].search(/[+\-x\/]/);
     if(secondOperator != -1)
     {
-        problem[2] = problem[1].slice(secondOperator, problem[1].length);
-        problem[1] = problem[1].slice(0, secondOperator);
+        problem = separateSecondHalfOfOperation(problem);
+        problem[1] = removeExtraDecimalPoints(problem[1]);
+        console.log(problem[1]);
         problem = operate(problem[0] + operator + problem[1]) + problem[2];
     }
     else
     {
+        problem[1] = removeExtraDecimalPoints(problem[1]);
         problem = operate(problem[0] + operator + problem[1]);
     }
     
@@ -81,6 +104,9 @@ function input(e, input)
         case '=':
             let problem = calcInputs.lastIndexOf('=') == -1 ? calcInputs : calcInputs.slice(calcInputs.lastIndexOf('=')+1, calcInputs.length);
             solveProblem(problem);
+        break;
+        case '•':
+            calcInputs += '.';
         break;
         default:
             calcInputs += input;

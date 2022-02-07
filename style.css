@@ -27,6 +27,7 @@ header {
     width: 25vw;
     height: 20vw;
     padding: 16px 0;
+    border-radius: 8px;
     background-color: green;
 
     display: flex;
