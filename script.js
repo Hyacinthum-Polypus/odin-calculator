@@ -50,7 +50,7 @@ function printResult(result)
 
 function removeExtraDecimalPoints(number)
 {
-    return number.split('.').reduce((newString, currentString, currentIndex) => {return currentIndex == 0 ? newString + currentString + '.' : newString + currentString}, '')
+    return number.indexOf('.') == -1 ? number : number.split('.').reduce((newString, currentString, currentIndex) => {return currentIndex == 0 ? newString + currentString + '.' : newString + currentString}, '')
 }
 
 function separateFirstHalfOfOperation(problem)
@@ -80,7 +80,6 @@ function solveProblem(problem)
     {
         problem = separateSecondHalfOfOperation(problem);
         problem[1] = removeExtraDecimalPoints(problem[1]);
-        console.log(problem[1]);
         problem = operate(problem[0] + operator + problem[1]) + problem[2];
     }
     else
@@ -130,3 +129,44 @@ function input(e, input)
 const buttons = document.querySelectorAll('button');
 
 buttons.forEach(button => {button["data-input"] = button.textContent; button.addEventListener('click', (e) => input(e, button["data-input"]));});
+
+function keyboardInput(e)
+{
+    switch(e.key)
+    {
+        case 'C':
+        case 'c':
+            input(e, 'C');
+        break;
+        case 'Backspace':
+            input(e, '⇐');
+        break;
+        case '+':
+            input(e, '+');
+        break;
+        case '-':
+            input(e, '-');
+        break;
+        case '*':
+        case 'x':
+            input(e, 'x');
+        break;
+        case '/':
+            input(e, '/');
+        break;
+        case 'Enter':
+        case '=':
+            input(e, '=');
+        break;
+        case '.':
+            input(e, '•');
+        break;
+        default:
+            if(Number.isNaN(+e.key) == true) return;
+
+            input(e, e.key);            
+        break;
+    }
+}
+
+window.addEventListener('keydown', keyboardInput);
