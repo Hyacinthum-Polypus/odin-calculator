@@ -43,9 +43,30 @@ function operate(...inputs)
     }
 }
 
+function printResult(result)
+{
+    calcInputs += '=' + result;
+}
+
 function solveProblem(problem)
 {
-    console.log(problem);
+    operator = problem.toString().match(/[+\-x\/]/);
+    if(operator == 'x') operator = '*';
+    if(operator == null) return printResult(problem);
+    problem = [problem.slice(0, problem.search(/[+\-x\/]/)), problem.slice(problem.search(/[+\-x\/]/)+1, problem.length)];
+    const secondOperator = problem[1].search(/[+\-x\/]/);
+    if(secondOperator != -1)
+    {
+        problem[2] = problem[1].slice(secondOperator, problem[1].length);
+        problem[1] = problem[1].slice(0, secondOperator);
+        problem = operate(problem[0] + operator + problem[1]) + problem[2];
+    }
+    else
+    {
+        problem = operate(problem[0] + operator + problem[1]);
+    }
+    
+    solveProblem(problem)
 }
 
 const outputText = document.getElementById('output-text');
@@ -55,17 +76,26 @@ function input(e, input)
     switch(input)
     {
         case 'C':
-            calcInput = "";
+            calcInputs = "";
         break;
         case '=':
             let problem = calcInputs.lastIndexOf('=') == -1 ? calcInputs : calcInputs.slice(calcInputs.lastIndexOf('=')+1, calcInputs.length);
             solveProblem(problem);
+        break;
         default:
             calcInputs += input;
         break;
     }
 
-    outputText.textContent = calcInputs;
+    const maxOutputLength = 15;
+    if(calcInputs.length > maxOutputLength)
+    {
+        outputText.textContent = "..."+calcInputs.substring(calcInputs.length, calcInputs.length-maxOutputLength);
+    }
+    else
+    {
+        outputText.textContent = calcInputs;
+    }
 }
 
 const buttons = document.querySelectorAll('button');
